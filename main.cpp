@@ -12,46 +12,41 @@ int main(int argc, char *argv[])
     w.show();
 
 
-    BitArray b(10);
-    //cout << b.size() << endl;
+    BitArray b(25, 1, performanceHint::SPARSE);
 
     for(int i = 0; i < b.size(); i ++)
     {
-        b.clear();
-        b.set(i, true);
+        //b.clear();
+        //b[i] = true;
         //b.print();
     }
-    //b.set(1, true);
+    //cout << endl;
+
+    //b.setRange(4, 20, false);
     //b.print();
-    BitArray b2(b);
-    //b2.print();
 
-    //cout << b[9];
+    //vector<unsigned short> indices = {1, 4, 5};
 
+    //b[1] = true;
+    //b[4] = false;
+    //b[5] = true;
 
-    b.clear();
-    b[5] = true;
-    //b.set(5, true);
-    bool b5 = b[5];
-    std::cout << b5 << std::endl;
+    b.setRange(0, 25, true);
+    b.setRange(4, 20, false);
 
-    for(int i = 0; i < b.size(); i ++)
-    {
-        b.clear();
-        b[i] = true;
-        b.print();
-    }
+    b.print();
 
-    //cout << b.at(8);
+    //auto on = b.onBits();
 
-    unsigned char bt = 1;
-    bt <<= 7;
-    //cout << static_cast<unsigned int>(static_cast<unsigned char>(bt))  << endl;
-    //cout << static_cast<bool>(bt) << endl;
+    //b[on].print();
+    //BitArray on = b[indices];
+    //on.print();
+    cout << endl;
+
+    //b[3] = true;
+    //cout << b[3] << endl;
 
 
-    int p;
-    cin >> p;
 
     //return a.exec();
 }
