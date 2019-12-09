@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     bitarray.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    spatialpooler.cpp
 
 HEADERS += \
     bitarray.h \
-    mainwindow.h
+    mainwindow.h \
+    spatialpooler.h
 
 FORMS += \
     mainwindow.ui

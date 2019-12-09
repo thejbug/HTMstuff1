@@ -60,6 +60,7 @@ public:
     ///subset the array with a list of indices
     BitArray operator[](const std::vector<unsigned short>& indices);
 
+    ///or two entire arrays together
     BitArray operator|(BitArray&);
 
     BitArray(const BitArray& other);
