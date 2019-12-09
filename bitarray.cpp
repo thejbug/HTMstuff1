@@ -48,6 +48,11 @@ BitArray::BitArray(const BitArray& other)
         memcpy(bits_, other.bits_, other.size_ / 8 + 1);
         onBits_ = nullptr;
     }
+    else if(other.onBits_)
+    {
+        bits_ = nullptr;
+        *onBits_ = *other.onBits_;
+    }
 }
 
 BitArray::~BitArray()
@@ -262,45 +267,76 @@ void BitArray::clear()
 
 }
 
-BitArray BitArray::operator|(const BitArray & arr)
+BitArray BitArray::operator|(BitArray & arr)
 {
     if(size_ != arr.size_)
     {
         std::cout << "arrays are not the same size" << std::endl;
     }
-    performanceHint hint = NONE;
-    float sparsity = 1.0f;
-    if(hint_ == arr.hint_)
-    {
-        if(hint_ == SPARSE)
-        {
-            hint = SPARSE;
-        }
-        else if(hint_ == DENSE)
-        {
-            hint = DENSE;
-        }
-        else
-        {
-            sparsity = std::max(expectedSparsity_, arr.expectedSparsity_);
-            hint = NONE;
-        }
-    }
-    else
-    {
 
-    }
-
-    BitArray ret(size_, sparsity, hint);
-    if(ret.bits_)
+    //if both arrays are dense
+    if(bits_ && arr.bits_)
     {
+        BitArray ret(size_, 1, DENSE);
         int numBytes = size_ / 8 + 1;
         for(int b = 0; b < numBytes; b ++)
         {
             ret.bits_[b] = bits_[b] | arr.bits_[b];
         }
+        return ret;
     }
-    return ret;
+    //if both arrays are sparse
+    else if(onBits_ && arr.onBits_)
+    {
+        BitArray ret(size_, 1, SPARSE);
+        ret.onBits_ = onBits_;
+        for(int i = 0; i < arr.onBits_->size(); i ++)
+        {
+            ret.set(arr.onBits_->at(i), true);
+        }
+        return ret;
+    }
+    //if the storage is different for both arguments
+    else
+    {
+        //the hint for the first argument determines the hint for the returned array
+        BitArray ret(size_, 1, hint_);
+
+        //determine which arg has which storage
+        BitArray* denseArray;
+        BitArray* sparseArray;
+        if(bits_)
+        {
+            denseArray = this;
+            sparseArray = &arr;
+        }
+        else
+        {
+            denseArray = &arr;
+            sparseArray = this;
+        }
+
+        if(hint_ == DENSE | (hint_ == NONE && bits_))
+        {
+            ret.bits_ = denseArray->bits_;
+            for(int i = 0; i < sparseArray->onBits_->size(); i ++)
+            {
+                ret.set(sparseArray->onBits_->at(i), true);
+            }
+            return ret;
+        }
+        else if(hint_ == SPARSE | (hint_ == NONE && onBits_))
+        {
+            ret.onBits_ = sparseArray->onBits_;
+            auto denseOn = denseArray->onBits();
+            for(int i = 0; i < denseOn.size(); i ++)
+            {
+                ret.set(denseOn[i], true);
+            }
+            return ret;
+        }
+
+    }
 }
 
 //helper for printing
@@ -316,6 +352,7 @@ int countDigits(int num)
 
 void BitArray::print()
 {
+
     int maxIndex = size_ - 25;
     int maxDigits = countDigits(std::max(0, maxIndex));
 

@@ -3,6 +3,7 @@
 
 #include "vector"
 #include "iostream"
+#include "map"
 
 enum performanceHint
 {
@@ -59,7 +60,7 @@ public:
     ///subset the array with a list of indices
     BitArray operator[](const std::vector<unsigned short>& indices);
 
-    BitArray operator|(const BitArray&);
+    BitArray operator|(BitArray&);
 
     BitArray(const BitArray& other);
     BitArray(unsigned int size = 16, float expectedSparsity = 1.0f, performanceHint hint = NONE);

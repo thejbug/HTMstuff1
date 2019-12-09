@@ -13,6 +13,16 @@ int main(int argc, char *argv[])
 
 
     BitArray b(25, 1, performanceHint::SPARSE);
+    BitArray c(25, 1, performanceHint::DENSE);
+
+    b[1] = true;
+    c[2] = true;
+    b.print();
+    cout << endl;
+    c.print();
+    cout << endl;
+
+    (b | c).print();
 
     for(int i = 0; i < b.size(); i ++)
     {
@@ -34,7 +44,7 @@ int main(int argc, char *argv[])
     b.setRange(0, 25, true);
     b.setRange(4, 20, false);
 
-    b.print();
+    //b.print();
 
     //auto on = b.onBits();
 
