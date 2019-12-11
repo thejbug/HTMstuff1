@@ -1,21 +1,36 @@
 #include "spatialpooler.h"
+#include <algorithm>
+#include <vector>
 
 SpatialPooler::SpatialPooler()
 {
 
 }
 
-SpatialPooler::SpatialPooler(unsigned int size, float sparsity)
+SpatialPooler::SpatialPooler(unsigned int size, BitArray& input, float sparsity, float potentialPercent)
 {
     size_ = size;
+    potentialPercent_ = potentialPercent;
     setSparsity(sparsity);
 
+    unsigned int inputSize = static_cast<unsigned int>(input.size() * potentialPercent) ;
+
+
+    for(unsigned int n = 0; n < size; n ++)
+    {
+        Neuron* neuron = new Neuron(input, potentialPercent);
+        neurons_.push_back(neuron);
+    }
 }
 
 
-void SpatialPooler::setLearningEnable(bool b)
+void SpatialPooler::setLearningEnabled(bool b)
 {
     learningEnabled_ = b;
+}
+void SpatialPooler::setBoostingEnabled(bool b)
+{
+    boostingEnabled = b;
 }
 void SpatialPooler::setSynapseIncrement(float inc)
 {
@@ -40,5 +55,40 @@ void SpatialPooler::setKwinners(unsigned int k)
     sparsity_ = static_cast<float>(k) / size_;
 }
 
-//void computeOverlap(BitArray& input);
-//void computeKWinners();
+void SpatialPooler::computeOverlap(BitArray* input)
+{
+    overlaps = std::vector<NeuronScore>();//(neurons.size());
+    for(unsigned short i = 0; i < neurons_.size(); i ++)
+    {
+        Neuron* n = neurons_[i];
+        overlaps.push_back(NeuronScore(i, n->computeOverlap(input)));
+    }
+}
+void SpatialPooler::computeKWinners()
+{
+    std::sort(overlaps.begin(), overlaps.end());
+    activity_ = new BitArray(neurons_.size(), 1, SPARSE);
+    for(unsigned short i = 0; i < numOnBits_; i ++)
+    {
+        unsigned short indexInOverlapList = neurons_.size() - 1 - i;
+        unsigned short indexOfSpBit = overlaps[indexInOverlapList].index;
+        activity_->set(indexOfSpBit, true);
+    }
+}
+BitArray* SpatialPooler::activity()
+{
+    return activity_;
+}
+
+std::vector<Neuron*> SpatialPooler::neurons()
+{
+    return neurons_;
+}
+
+void SpatialPooler::fit(BitArray *input)
+{
+    for(unsigned int n = 0; n < neurons_.size(); n ++)
+    {
+        neurons_[n]->fitProximal(input, 0, synapseIncrement_, synapseDecrement_);
+    }
+}

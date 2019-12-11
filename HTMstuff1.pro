@@ -17,13 +17,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     bitarray.cpp \
+    dendrite.cpp \
     main.cpp \
     mainwindow.cpp \
+    neuron.cpp \
     spatialpooler.cpp
 
 HEADERS += \
     bitarray.h \
+    dendrite.h \
     mainwindow.h \
+    neuron.h \
     spatialpooler.h
 
 FORMS += \

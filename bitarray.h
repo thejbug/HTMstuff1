@@ -67,6 +67,8 @@ public:
     BitArray(unsigned int size = 16, float expectedSparsity = 1.0f, performanceHint hint = NONE);
     ~BitArray();
 
+    void randomize(float percent = 0.5);
+
     void print();
 };
 

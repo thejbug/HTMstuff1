@@ -1,4 +1,6 @@
 #include "bitarray.h"
+#include "random"
+#include <cstdlib>
 
 BitArray::BitArray(unsigned int size, float expectedSparsity, performanceHint hint)
 {
@@ -348,6 +350,17 @@ int countDigits(int num)
         count ++;
     } while(num != 0);
     return count;
+}
+
+void BitArray::randomize(float percent)
+{
+    int threshold = 100 * percent;
+
+    for(int i = 0; i < size_; i ++)
+    {
+        bool val = (rand() % 100) <= threshold;
+        set(i, val);
+    }
 }
 
 void BitArray::print()
