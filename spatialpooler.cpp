@@ -13,14 +13,16 @@ SpatialPooler::SpatialPooler(unsigned int size, BitArray& input, float sparsity,
     potentialPercent_ = potentialPercent;
     setSparsity(sparsity);
 
-    unsigned int inputSize = static_cast<unsigned int>(input.size() * potentialPercent) ;
-
-
     for(unsigned int n = 0; n < size; n ++)
     {
         Neuron* neuron = new Neuron(input, potentialPercent);
         neurons_.push_back(neuron);
     }
+
+    activity_ = new BitArray(neurons_.size(), 1, SPARSE);
+
+    synapseIncrement_ = 10;
+    synapseDecrement_ = 12;
 }
 
 
@@ -61,13 +63,14 @@ void SpatialPooler::computeOverlap(BitArray* input)
     for(unsigned short i = 0; i < neurons_.size(); i ++)
     {
         Neuron* n = neurons_[i];
+        int overlap = n->computeOverlap(input);
         overlaps.push_back(NeuronScore(i, n->computeOverlap(input)));
     }
 }
 void SpatialPooler::computeKWinners()
 {
+    activity_->clear();
     std::sort(overlaps.begin(), overlaps.end());
-    activity_ = new BitArray(neurons_.size(), 1, SPARSE);
     for(unsigned short i = 0; i < numOnBits_; i ++)
     {
         unsigned short indexInOverlapList = neurons_.size() - 1 - i;
@@ -92,3 +95,9 @@ void SpatialPooler::fit(BitArray *input)
         neurons_[n]->fitProximal(input, 0, synapseIncrement_, synapseDecrement_);
     }
 }
+
+unsigned int SpatialPooler::size()
+{
+    return size_;
+}
+

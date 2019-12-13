@@ -46,6 +46,7 @@ public:
 
     SpatialPooler(unsigned int size, BitArray& input, float sparsity = 0.05f, float potentialPercent = 1.0f);
 
+    unsigned int size();
     void setLearningEnabled(bool b);
     void setBoostingEnabled(bool b);
     void setSynapseIncrement(float inc);

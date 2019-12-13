@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     bitarray.cpp \
+    canvas1d.cpp \
     dendrite.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 HEADERS += \
     bitarray.h \
+    canvas1d.h \
     dendrite.h \
     mainwindow.h \
     neuron.h \
