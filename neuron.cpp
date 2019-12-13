@@ -10,7 +10,6 @@ Neuron::Neuron(BitArray& input, float potentialPercent)
     proximal = std::vector<Dendrite*>();
     Dendrite* prox = new Dendrite(input, potentialPercent);
     proximal.push_back(prox);
-    std::cout << "prox size: " << proximal.size() << std::endl;
 }
 
 unsigned short Neuron::computeOverlap(BitArray *input)
@@ -39,8 +38,8 @@ void Neuron::fitProximal(BitArray *input, unsigned char dendrite, unsigned char 
     dend->fit(input, inc, dec);
 }
 
-BitArray Neuron::getProximalConnections(unsigned int dendrite)
+Dendrite* Neuron::getProximalDendrite(unsigned int dendrite)
 {
-    return proximal[dendrite]->getConnections();
+    return proximal[dendrite];
 }
 

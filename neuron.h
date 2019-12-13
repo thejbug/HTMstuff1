@@ -19,7 +19,7 @@ public:
     unsigned short computeOverlap(BitArray* input);
     unsigned short getOverlapScore();
     void fitProximal(BitArray* input, unsigned char dendrite = 0, unsigned char inc = 20, unsigned char dec = 10);
-    BitArray getProximalConnections(unsigned int dendrite = 0);
+    Dendrite* getProximalDendrite(unsigned int dendrite = 0);
 };
 
 #endif // NEURON_H

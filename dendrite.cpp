@@ -73,3 +73,8 @@ void Dendrite::fit(BitArray *input, unsigned char inc, unsigned char dec)
         }
     }
 }
+
+std::vector<unsigned char> Dendrite::getPermanences()
+{
+    return permanences;
+}

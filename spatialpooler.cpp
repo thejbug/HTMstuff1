@@ -63,7 +63,7 @@ void SpatialPooler::computeOverlap(BitArray* input)
     for(unsigned short i = 0; i < neurons_.size(); i ++)
     {
         Neuron* n = neurons_[i];
-        int overlap = n->computeOverlap(input);
+        //int overlap = n->computeOverlap(input);
         overlaps.push_back(NeuronScore(i, n->computeOverlap(input)));
     }
 }
@@ -90,9 +90,10 @@ std::vector<Neuron*> SpatialPooler::neurons()
 
 void SpatialPooler::fit(BitArray *input)
 {
-    for(unsigned int n = 0; n < neurons_.size(); n ++)
+    for(unsigned int i = overlaps.size() - 1; i > overlaps.size() - numOnBits_ - 1; i --)
     {
-        neurons_[n]->fitProximal(input, 0, synapseIncrement_, synapseDecrement_);
+        int neuronIndex = overlaps[i].index;
+        neurons_[neuronIndex]->fitProximal(input, 0, synapseIncrement_, synapseDecrement_);
     }
 }
 

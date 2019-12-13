@@ -118,8 +118,10 @@ void BitArray::set(unsigned int index, bool value)
     }
 }
 
-void BitArray::setRange(int start, int end, bool value)
+void BitArray::setRange(int first, int last, bool value)
 {
+    unsigned int start = std::min(first, last);
+    unsigned int end = std::max(first, last);
     unsigned int range = end - start;
     if(bits_)
     {

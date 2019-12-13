@@ -21,6 +21,7 @@ public:
     unsigned short computeOverlap(BitArray* input);
     unsigned short getOverlap();
     BitArray getConnections();
+    std::vector<unsigned char> getPermanences();
     void fit(BitArray* input, unsigned char inc, unsigned char dec);
 };
 

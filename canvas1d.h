@@ -19,11 +19,12 @@ class Canvas1D: public QLabel
 
     QImage workingImage;
     SpatialPooler* spatialPooler;
+    BitArray* input;
 
     Point center;
     float imageScale;
     int cellWidth;
-
+    int t = 0;
 
 public:
     Canvas1D(QWidget* parent = nullptr);
@@ -34,6 +35,14 @@ public:
 
     void drawNetwork();
     void drawCells(BitArray* cells, Point pos);
+    void drawSynapses(Point spPos, Point inPos);
+    void animateFeedForward(Point spPos, Point inPos);
+    void drawLearning(float prog);
+
+    void computeTimeStep();
+
+public slots:
+    void step();
 };
 
 #endif // CANVAS1D_H
