@@ -6,22 +6,6 @@
 
 class SpatialPooler
 {
-    unsigned int size_;
-    float sparsity_;
-    unsigned short numOnBits_;
-
-    float potentialPercent_;
-
-    bool boostingEnabled;
-    float maxBoostFactor_;
-    float minBoostFactor_;
-
-    //learning parameters
-    bool learningEnabled_;
-    unsigned char synapseIncrement_ = 20;
-    unsigned char synapseDecrement_ = 8;
-    unsigned char synapseConnectedThreshold_ = 50;
-
     //stored values
     BitArray* activity_;
 
@@ -42,6 +26,23 @@ class SpatialPooler
     std::vector<NeuronScore> overlaps;
 
 public:
+
+    unsigned int size_;
+    float sparsity_;
+    unsigned short numOnBits_;
+
+    float potentialPercent_;
+
+    bool boostingEnabled;
+    float maxBoostFactor_;
+    float minBoostFactor_;
+
+    //learning parameters
+    bool learningEnabled_;
+    unsigned char synapseIncrement_ = 20;
+    unsigned char synapseDecrement_ = 8;
+    unsigned char synapseConnectedThreshold_ = 50;
+
     SpatialPooler();
 
     SpatialPooler(unsigned int size, BitArray& input, float sparsity = 0.05f, float potentialPercent = 1.0f);

@@ -22,7 +22,10 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     neuron.cpp \
-    spatialpooler.cpp
+    spatialpooler.cpp \
+    sprite.cpp \
+    temporalmemory.cpp \
+    tmcanvas.cpp
 
 HEADERS += \
     bitarray.h \
@@ -30,7 +33,11 @@ HEADERS += \
     dendrite.h \
     mainwindow.h \
     neuron.h \
-    spatialpooler.h
+    spatialpooler.h \
+    sprite.h \
+    temporalmemory.h \
+    tmcanvas.h \
+    json.hpp \
 
 FORMS += \
     mainwindow.ui

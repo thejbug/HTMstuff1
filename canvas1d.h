@@ -20,10 +20,13 @@ class Canvas1D: public QLabel
     QImage workingImage;
     SpatialPooler* spatialPooler;
     BitArray* input;
+    BitArray* synapsesToShow;
 
     Point center;
     float imageScale;
     int cellWidth;
+    int cellheight;
+    int spSize;
     int t = 0;
 
 public:

@@ -69,6 +69,9 @@ public:
 
     void randomize(float percent = 0.5);
 
+    //helper for checking if a value is in a list
+    static int in(unsigned int value, std::vector<unsigned short>* list);
+
     void print();
 };
 

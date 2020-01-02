@@ -12,7 +12,8 @@ Canvas1D::Canvas1D(QWidget* parent):
     int labh = 550;
     setGeometry(50,100, labw, labh);
     imageScale = 2.0f;
-    cellWidth = 5 * imageScale;
+    cellWidth = 5.0f * imageScale;
+    cellheight = 15 * imageScale;
 
     center = Point(labw * imageScale / 2, labh * imageScale / 2);
 
@@ -28,7 +29,8 @@ void Canvas1D::drawNetwork()
     int w = width() * imageScale;
     int h = height() * imageScale;
     workingImage = QImage(w, h, QImage::Format_RGB32);
-    workingImage.fill(QColor(220, 235, 252));
+    workingImage = QImage("/Users/jaredemery/Desktop/QTprojects/darkGarage.png").scaled(w,h);
+    //workingImage.fill(QColor(30, 30, 30));
 
     Point inputPos(center.x, 750);
     Point spPos(center.x, 200);
@@ -47,7 +49,9 @@ void Canvas1D::drawNetwork()
 void Canvas1D::drawCells(BitArray* cells, Point pos)
 {
     QPainter painter(&workingImage);
-    painter.setPen(QColor(0,0,0));
+    QPen pen(QColor(180,180,180));
+    pen.setWidth(2);
+    painter.setPen(pen);
 
     int numCells = cells->size();
     int totalWidth = numCells * cellWidth;
@@ -61,9 +65,10 @@ void Canvas1D::drawCells(BitArray* cells, Point pos)
         }
         else
         {
-            painter.setBrush(QColor(255,255,255));
+            painter.setBrush(QColor(25,25,25));
         }
-        painter.drawRect(startX + offset, pos.y, cellWidth, cellWidth);
+        int rad = cellWidth * 0.35f;
+        painter.drawRoundedRect(startX + offset, pos.y, cellWidth, cellheight, rad, rad);
     }
 }
 
@@ -89,7 +94,8 @@ void Canvas1D::drawSynapses(Point spPos, Point inPos)
 
         for(int p = 0; p < perms.size(); p ++)
         {
-            if(rand() % 100 > 15)
+            int randomId = n * perms.size() + p;
+            if(!synapsesToShow->at(randomId))
             {
                 continue;
             }
@@ -106,8 +112,9 @@ void Canvas1D::drawSynapses(Point spPos, Point inPos)
             {
                 int penw = perms[p] / 75;
                 pen.setWidth(penw);
+                pen.setColor(QColor(200,200,200));
                 painter.setPen(pen);
-                painter.drawLine(spStartX + spOffset, spPos.y + cellWidth,
+                painter.drawLine(spStartX + spOffset, spPos.y + cellheight,
                                  inStartX + inOffset, inPos.y);
             }
 
@@ -127,7 +134,7 @@ void Canvas1D::animateFeedForward(Point spPos, Point inPos)
     int inWidth = input->size() * cellWidth;
     int inStartX = inPos.x - inWidth / 2 + cellWidth / 2;
 
-    int spY = spPos.y + cellWidth;
+    int spY = spPos.y + cellheight;
     int inY = inPos.y;
 
 
@@ -156,7 +163,7 @@ void Canvas1D::animateFeedForward(Point spPos, Point inPos)
             {
                 if(output->at(n))
                 {
-                    pen.setWidth(2);
+                    pen.setWidth(3);
                     pen.setColor(QColor(255, 150, 0));
                 }
                 else
@@ -228,12 +235,12 @@ void Canvas1D::computeTimeStep()
 {
     if(!input)
     {
-        input = new BitArray(150);
+        input = new BitArray(15);
     }
     input->randomize();
     t ++;
     int start = t % input->size();
-    int end = std::min(static_cast<int>(input->size()) , start + 5);
+    int end = std::min(static_cast<int>(input->size()) , start + 8);
     //input->clear();
     //input->setRange(start, end, true);
 
@@ -241,8 +248,11 @@ void Canvas1D::computeTimeStep()
     if(!spatialPooler)
     {
         spatialPooler = new SpatialPooler(150, *input, 0.05f);
-        spatialPooler->setSynapseIncrement(0.01f);
-        spatialPooler->setSynapseDecrement(0.01f);
+        spatialPooler->setSynapseIncrement(0.05f);
+        spatialPooler->setSynapseDecrement(0.05f);
+
+        synapsesToShow = new BitArray(spatialPooler->size() * input->size(), 1, DENSE);
+        synapsesToShow->randomize(0.9f);
     }
     spatialPooler->computeOverlap(input);
     spatialPooler->computeKWinners();
@@ -262,7 +272,11 @@ void Canvas1D::step()
 
 void Canvas1D::mouseMoveEvent(QMouseEvent *ev)
 {
-    step();
+    Point inputPos(center.x, 750);
+    Point spPos(center.x, 200);
+
+    computeTimeStep();
+    drawNetwork();
 }
 
 void Canvas1D::mousePressEvent(QMouseEvent *ev)

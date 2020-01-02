@@ -63,9 +63,11 @@ void SpatialPooler::computeOverlap(BitArray* input)
     for(unsigned short i = 0; i < neurons_.size(); i ++)
     {
         Neuron* n = neurons_[i];
-        //int overlap = n->computeOverlap(input);
+        int overlap = n->computeOverlap(input);
+        //std::cout << "col " << i << ": " << overlap << "\n";
         overlaps.push_back(NeuronScore(i, n->computeOverlap(input)));
     }
+    //std::cout << std::endl;
 }
 void SpatialPooler::computeKWinners()
 {

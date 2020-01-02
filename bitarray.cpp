@@ -39,6 +39,7 @@ BitArray::BitArray(unsigned int size, float expectedSparsity, performanceHint hi
             onBits_ = new std::vector<unsigned short>;
         }
     }
+    clear();
 }
 
 BitArray::BitArray(const BitArray& other)
@@ -53,7 +54,7 @@ BitArray::BitArray(const BitArray& other)
     else if(other.onBits_)
     {
         bits_ = nullptr;
-        *onBits_ = *other.onBits_;
+        onBits_ = new std::vector<unsigned short>(*other.onBits_);
     }
 }
 
@@ -62,7 +63,7 @@ BitArray::~BitArray()
 
 }
 
-int in(unsigned int value, std::vector<unsigned short>* list)
+int BitArray::in(unsigned int value, std::vector<unsigned short>* list)
 {
     for(int i = 0; i < list->size(); i ++)
     {
